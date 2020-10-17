@@ -26,9 +26,9 @@ So the idea was we can manage our material imports in a separate file named mate
 in entire app.
 
 For including a theme, we need to add @import '@angular/material/prebuilt-themes/<the theme>.css';
-to styles.css file. Because angular material componenets use a theme. Angular material ships with a couple of pre-build themes.
+to styles.scss file. Because angular material componenets use a theme. Angular material ships with a couple of pre-build themes.
 You can see those themes by going to node_modules/@angular/material/prebuilt-themes .
-By adding @import... in styles.css file, all of the angular material components will automatically use that color combination of
+By adding @import... in styles.scss file, all of the angular material components will automatically use that color combination of
 that imported theme.
 
 Also you can install hammer.js as a dependency, in order to support gestures on mobile devices like for example sliding with
@@ -89,11 +89,63 @@ in material.module.ts file.
 
 Now if you put 2 inputs which are wrapped inside <mat-form-field> , they will sit next to each other. But in this case
 we want to have them under each other. So we can use another package to control the layout.
+
+10. Flexbox - A Quick Refresher:
+We can use angular flex-layout package.
+fxLayout directive can be added to any container element to control how the child elements of that container should be positioned.
+The child component gets fxFlex to takes all of the available space and evenly distributed across all child elements also you can
+make that available space to distribute not evenly or not equally.
+
+11. Controlling the Layout with @angularflex-layout:
+npm install @angular/flex-layout --save
+Important: When you added a new package, rerun ng serve or other build commands.
+After doing the prior command, we need to import {FlexLayoutModule} to NgModule() to unlock the stuff that are in the new installed
+package which is @angularflex-layout in app.module.ts file and then add the FlexLayoutModule to imports array of app.module.ts
+file. Now you can start using that package.
+Remember we didn't add this package to material.module.ts file because that package is a separate package than material so it
+needed to add it to app.module which is a general module and also don't forget at the end we are adding material.module.ts
+to app.module.ts file.
+
+Now we need to make sure that our form fields which their parent have fxLayout="column" , don't take the whole width of their
+container. So we can define some width for <form> itself or define a section parent for <form> and define some width for
+it because <form> is a block element by default and will get all of the width of it's <div> or <section> parent.
+
+You can add fxLayoutAlign to the same element(container) that you added fxLayout on it.
+
+You can directly target the component selectors of material design components in scss or css file like any other HTML element.
+So like: .mat-form-field {...}
+
+12. Adding & Configuring the Submit Button:
+The <mat-form-field> with their <input>s inside of them, work with both reactive approach and TD approach. So you can use
+either of those two.
+If you add a button in that <form> when you click that button, it would submit the form with full reload which we don't want
+it. SO WE MUST CONTROL THAT FORM THROUGH ANGULAR. Also remember:
+Learn: Adding type="submit" for the buttons which are for submitting the forms is a good practice.
+Important: Remember: By default the form which is not initialized with the reactive approach, angular uses the TD approach IF
+ we add a special import at app.module.ts file which is FormsModule. So we can import it on top of FlexLayoutModule.
+ Then we must add that module to imports array of app.module file. By doing that, now angular will detect our forms and will
+ AUTOMATICALLY create an object representation of those forms behind the scenes. But the form itself is not useful though.
+ We need to register the inputs which are in form as controls to that angular form and we do this by adding 2 things in TD
+ approach. First we need to add ngModel directive on inputs (we could use 2 way data binding too with that. But this is also
+ enough to make angular aware of it and also there in the signup form, we don't need to use 2 way data binding). Also we need
+ to give the inputs the name attribute . Now with these 2, we got the controls setup.
+ Now to make that form submittable, first let's give the form, a local reference and set it to ngForm. By doing that,
+ by using that local reference we can access the automatically created object of that form. So it would store that automatically
+ created object of that form in that local reference. To get that local reference in .ts file too, we can bind the
+ (ngSubmit) event a method and then pass that local reference to that method. Now in .ts file we can create that method and add
+ an arg in () of that method to actually receive that local reference in .ts file which we passed in template file.
+ So by saying onSubmit(f); in template of signup, we are passing the automatically created form by angular to .ts file .
+
+ Remember: When you want to pass the local reference you must write the name of it without #.
+ In values property of the automatically created form, we get the values that user inputted into the inputs of form.
+
+13. Implementing Hints and Validation Errors (on Forms):
+
 -->
 
 
 <!-- 4. Customising an Angular Material Theme:
-First create a file next to the styles.css file , which that new file is my-theme.scss and in this new file we need to add
+First create a file next to the styles.scss file , which that new file is my-theme.scss and in this new file we need to add
 @import '~@angular/material/theming'; to that scss file. Then add @include mat-core(); to that file too.
 By adding that, a lot of sass variables and ... would be avialable for us.
 Now we need to define our colors and themes. So add:
@@ -115,9 +167,9 @@ mat-palette() function is provided by theming package.
 So now the 3 colors are set up.
 
 To angular-material-theme() function, you pass the theme you created and stored from the result of mat-light-theme() . Now
-we must go to styles.css and comment the @import expression. Because we don't want 2 themes fighting with each other.
+we must go to styles.scss and comment the @import expression. Because we don't want 2 themes fighting with each other.
 This means we are now using our custom theme which is the my-theme.scss instead of that theme which with that @import in
-styles.css we were loading. So now we need to go to angular.json and in styles array you need to include the new scss file
+styles.scss we were loading. So now we need to go to angular.json and in styles array you need to include the new scss file
 for custom theme you created.
 Now you must quit ng serve and re run it again. That command will build our project and also the new .scss file.
 Important: So when you make some changes to angular.json you should restart the ng serve or ... .

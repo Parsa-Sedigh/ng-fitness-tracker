@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {FormsModule} from '@angular/forms';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -11,8 +13,8 @@ import { CurrentTrainingComponent } from './training/current-training/current-tr
 import { NewTrainingComponent } from './training/new-training/new-training.component';
 import { PastTrainingsComponent } from './training/past-trainings/past-trainings.component';
 import { WelcomeComponent } from './welcome/welcome.component';
-import {AppRoutingModule} from "./app-routing.module";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { AppRoutingModule } from "./app-routing.module";
+import { MatFormFieldModule } from "@angular/material/form-field";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {MatFormFieldModule} from "@angular/material/form-field";
         BrowserAnimationsModule,
         MaterialModule,
         AppRoutingModule,
-        MatFormFieldModule
+        MatFormFieldModule,
+        FlexLayoutModule,
+        FormsModule
     ],
   providers: [],
   bootstrap: [AppComponent]
